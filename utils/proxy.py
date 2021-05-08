@@ -52,9 +52,8 @@ def check_proxy(host, port, type):
     flag = False
     try:
         # 超过3秒的代理就不要了
-        r = requests.get('http://httpbin.org/ip', headers=headers, proxies=proxies, timeout=3, verify=False)
+        r = requests.get('http://httpbin.org/ip', headers=headers, proxies=proxies, timeout=5, verify=False)
         if r.status_code == 200 and r.json().get("origin") and host in r.json().get("origin"):
-            # print('请求IP:'+r.json().get("origin")+', 代理为:'+json.dumps(proxies))
             logger.info('Proxy is ok : {}'.format(proxies))
             flag = True
     except Exception as e:
