@@ -6,10 +6,9 @@
 
 import random
 from scrapy import signals
-from .utils.proxy import User_Agent
+from utils.proxy import User_Agent
 
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
 
 
 class ProxyspiderSpiderMiddleware:

@@ -1,7 +1,7 @@
 import scrapy
 from ..items import IPItem
-from ..utils.proxy import check_proxy, check_proxy_type
-from ..utils.common import hash_code
+from utils.proxy import check_proxy, check_proxy_type
+from utils.common import hash_code
 
 
 class XilaSpider(scrapy.Spider):
