@@ -1,0 +1,69 @@
+#!usr/bin/env python
+#-*- coding:utf-8 -*-
+
+import random
+import requests
+
+User_Agent = [
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
+            "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6",
+            "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
+            "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
+            "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
+        ]
+
+
+def check_proxy(host, port, type):
+    """
+    检验代理是否可用
+    """
+    if 'HTTP' == type:
+        proxies = {"http": "http://{host}:{port}".format(host=host, port=port)}
+    elif 'HTTPS' == type:
+        proxies = {"https": "https://{host}:{port}".format(host=host, port=port)}
+    else:
+        proxies = {
+            "https": "https://{host}:{port}".format(host=host, port=port),
+            "http": "http://{host}:{port}".format(host=host, port=port)
+        }
+
+    headers = {'User-Agent': random.choice(User_Agent),
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+               'Accept-Language': 'zh-CN,zh;q=0.8'}
+
+    flag = False
+    try:
+        # 超过3秒的代理就不要了
+        r = requests.get('http://httpbin.org/ip', headers=headers, proxies=proxies, timeout=3, verify=False)
+        print(r.json())
+        if r.status_code == 200 and r.json().get("origin") and host in r.json().get("origin"):
+            # print('请求IP:'+r.json().get("origin")+', 代理为:'+json.dumps(proxies))
+            print('p : {}'.format(proxies))
+            flag = True
+    except Exception as e:
+        print(e)
+        flag = False
+    return flag
+
+
+def check_proxy_type(type):
+    if ',' in type:
+        return 'HTTP&HTTPS'
+    elif 'HTTPS' in type:
+        return 'HTTPS'
+    else:
+        return 'HTTP'
