@@ -3,6 +3,10 @@
 
 import random
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 User_Agent = [
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -49,13 +53,12 @@ def check_proxy(host, port, type):
     try:
         # 超过3秒的代理就不要了
         r = requests.get('http://httpbin.org/ip', headers=headers, proxies=proxies, timeout=3, verify=False)
-        print(r.json())
         if r.status_code == 200 and r.json().get("origin") and host in r.json().get("origin"):
             # print('请求IP:'+r.json().get("origin")+', 代理为:'+json.dumps(proxies))
-            print('p : {}'.format(proxies))
+            logger.info('Proxy is ok : {}'.format(proxies))
             flag = True
     except Exception as e:
-        print(e)
+        logger.error(e)
         flag = False
     return flag
 

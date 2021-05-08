@@ -87,3 +87,8 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+import datetime
+today = datetime.datetime.now()
+LOG_FILE = 'log/{0}_{1}_{2}.log'.format(today.year, today.month, today.day)
+LOG_LEVEL = 'INFO'

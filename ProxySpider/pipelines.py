@@ -11,6 +11,9 @@ import datetime
 from twisted.enterprise import adbapi
 import pymysql.cursors
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class MysqlPipeline:
@@ -51,7 +54,7 @@ class MysqlPipeline:
         tx.execute("select * from ip_table where `id` = %s", item['id'])
         result = tx.fetchone()
         if result:
-            print("已经存在" + str(result))
+            logger.info("已经存在" + str(result))
             if result['valid'] != item['valid']:
                 tx.execute("update ip_table set `valid` = %s where `id` = %s", (item['valid'], item['id']))
         else:
@@ -72,16 +75,17 @@ class MysqlPipeline:
 
     def handle_error(self, e):
         """Handle error"""
-        print(e)
+        logger.error(e)
 
     def close_spider(self, spider):
         """close_spider the connection pool"""
         self.dbpool.close()
-        print(self.web_info)
+        logger.info(self.web_info)
         data = []
         for web in self.web_info.keys():
             web_info = self.web_info.get(web)
             data.append(list(web_info.values()))
         df = pd.DataFrame(data=data, columns=['web', 'time', 'ip_num', 'valid_num'])
-        df.to_csv('result.csv')
+        today = datetime.datetime.now()
+        df.to_csv('output/web_info_{}_{}_{}.csv'.format(today.year, today.month, today.day))
 
