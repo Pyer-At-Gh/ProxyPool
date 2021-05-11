@@ -49,28 +49,28 @@ def check_proxy(host, port, type):
                'Connection': 'keep-alive',
                'Accept-Language': 'zh-CN,zh;q=0.8'}
 
-    flag = False
+    flag = 0
     try:
         # 超过3秒的代理就不要了
         r = requests.get('http://httpbin.org/ip', headers=headers, proxies=proxies, timeout=3, verify=False)
         if r.status_code == 200 and r.json().get("origin") and host in r.json().get("origin"):
             logger.info('Proxy is ok : {}'.format(proxies))
-            flag = True
+            flag = 1
     except Exception as e:
         logger.error(e)
-        flag = False
+        flag = 0
 
-    if not flag:
+    if flag == 0:
         try:
             # 超过3秒的代理就不要了
             r = requests.get('http://icanhazip.com/', headers=headers, proxies=proxies, timeout=3, verify=False)
             if r.status_code == 200 and r.json().get("origin") and host in r.json().get("origin"):
                 logger.info('Proxy is ok : {}'.format(proxies))
-                flag = True
+                flag = 1
         except Exception as e:
             logger.error(e)
-            flag = False
-            
+            flag = 0
+
     return flag
 
 

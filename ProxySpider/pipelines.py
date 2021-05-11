@@ -38,14 +38,13 @@ class MysqlPipeline:
 
         if asynItem['web'] in self.web_info:
             self.web_info[asynItem['web']]['ip_num'] = self.web_info[asynItem['web']]['ip_num'] + 1
-            self.web_info[asynItem['web']]['valid_num'] = self.web_info[asynItem['web']]['valid_num'] + \
-                                                      (1 if asynItem['valid'] else 0)
+            self.web_info[asynItem['web']]['valid_num'] = self.web_info[asynItem['web']]['valid_num'] + asynItem['valid']
         else:
             self.web_info[asynItem['web']] = {
                 'name': asynItem['web'],
                 'time': datetime.datetime.now(),
                 'ip_num': 1,
-                'valid_num': 1 if asynItem['valid'] else 0
+                'valid_num': asynItem['valid']
             }
 
     def __insertdata(self, tx, item, spider):
