@@ -57,6 +57,7 @@ class MysqlPipeline:
             logger.info("已经存在" + str(result))
             if result['valid'] != item['valid']:
                 tx.execute("update ip_table set `valid` = %s where `id` = %s", (item['valid'], item['id']))
+                logger.info('更新 ip {}'.format(item['host']+':'+item['port']))
         else:
             insert_sql = """
                     insert into ip_table(`id`, `host`, `port`, `web`, `type`, `anonymous`, `region`, `valid`) 
@@ -72,6 +73,7 @@ class MysqlPipeline:
                         item['region'],
                         item['valid'],
                     ))
+            logger.info('插入成功！')
 
     def handle_error(self, e):
         """Handle error"""
