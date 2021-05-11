@@ -105,7 +105,7 @@ class ProxyspiderDownloaderMiddleware:
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class UserAgentMiddleware:
+class MyUserAgentMiddleware:
     def __init__(self):
         self.user_agent_list = User_Agent
 

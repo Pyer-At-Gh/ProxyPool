@@ -52,7 +52,7 @@ DOWNLOAD_DELAY = 0.25
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    # 'ProxySpider.middlewares.ProxyspiderDownloaderMiddleware': 543,
-    'ProxySpider.middlewares.UserAgentMiddleware': 300,
+    'ProxySpider.middlewares.MyUserAgentMiddleware': 300,
 }
 
 # Enable or disable extensions

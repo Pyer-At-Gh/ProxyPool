@@ -14,12 +14,12 @@ class XilaSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'http://www.xiladaili.com/putong/{}/',
-            # 'http://www.xiladaili.com/gaoni/{}/',
-            # 'http://www.xiladaili.com/http/{}/',
-            # 'http://www.xiladaili.com/https/{}/'
+            'http://www.xiladaili.com/gaoni/{}/',
+            'http://www.xiladaili.com/http/{}/',
+            'http://www.xiladaili.com/https/{}/'
         ]
         for url in urls:
-            for i in range(1, 2):
+            for i in range(1, 2001):
                 yield scrapy.Request(url=url.format(i), callback=self.parse, dont_filter=True)
 
     def parse(self, response):
